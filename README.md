@@ -1,2 +1,2 @@
-# TetrisRivals
-A multiplayer remix on the classic arcade game - tetris! 
+# Tetris
+Intro to game dev in javascript

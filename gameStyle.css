@@ -1,0 +1,82 @@
+html {
+    background: url('Assets/background-game.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'VT3223', monospace;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0px !important;
+}
+
+p {
+    color: white;
+}
+
+.play-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.452);
+    border-radius: 10px;
+    margin: 0px 40px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.canvas-ctn {
+    display: flex;
+}
+
+.game-board {
+    border: 1px solid white;
+}
+
+button {
+    background-color: transparent;
+    color: white;
+    border: solid 1px white;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 2em;
+    padding: 10px;
+    margin: 20px 0px;
+}
+
+button:hover:enabled {
+    background-color: rgba(172, 255, 47, 0.308);
+    border: 2px solid greenyellow;
+}
+
+button:disabled {
+    background-color: rgba(83, 83, 83, 0.295);
+}
+
+.title-ctn {
+    display: flex;
+    flex-direction: column;
+    margin: 1vw;
+}
+
+.title {
+    color: greenyellow;
+    font-size: 7em;
+    margin: 10px 0px !important;
+}

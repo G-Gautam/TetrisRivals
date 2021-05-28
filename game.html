@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="app.js" charset="utf-8"></script>
+    <script src="constants.js" charset="utf-8"></script>
+    <script src="board.js" charset="utf-8"></script>
+    <script src="piece.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="gameStyle.css">
+    </link>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <title>Tetris Rivals</title>
+</head>
+
+<body>
+    <div class='title-ctn'>
+        <h1 class=title>T</h1>
+        <h1 class=title>E</h1>
+        <h1 class=title>T</h1>
+        <h1 class=title>R</h1>
+        <h1 class=title>I</h1>
+        <h1 class=title>S</h1>
+    </div>
+    <div class='play-area'>
+        <div class='grid'>
+            <div class='info' id='info-1'>
+                <p>Player 1</p>
+                <p>Score: 0</p>
+            </div>
+            <div class=canvas-ctn>
+                <canvas id="board-1" class="game-board"></canvas>
+                <canvas id=next-1 class=next></canvas>
+            </div>
+            <button class=ready onclick="startGame()">Ready</button>
+        </div>
+        <div class='grid'>
+            <div class='info' id='info-2'>
+                <p>Player 2</p>
+                <p>Score: 0</p>
+            </div>
+            <div class=canvas-ctn>
+                <canvas id=next-2 class=next></canvas>
+                <canvas id="board-2" class="game-board"></canvas>
+            </div>
+            <button class=ready disabled>Waiting</button>
+        </div>
+    </div>
+    <div class='title-ctn'>
+        <h1 class=title>R</h1>
+        <h1 class=title>I</h1>
+        <h1 class=title>V</h1>
+        <h1 class=title>A</h1>
+        <h1 class=title>L</h1>
+        <h1 class=title>S</h1>
+    </div>
+</body>

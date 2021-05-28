@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="app.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="style.css">
+    </link>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <title>Tetris Rivals</title>
+</head>
+
+<body>
+    <h1 class='title'>Tetris Rivals</h1>
+    <div class='mode-selector'>
+        <div class='mode' id='mode-private'>
+            <h3 class=subtitle>Private Lobby</h3>
+            <button id='create' onclick="startGameDummy()">Create Game</button>
+            <div class="separator">
+                <div class="line"></div>
+                <h5 class='sep-text'>OR</h5>
+                <div class="line"></div>
+            </div>
+            <input placeholder="Code" class=code-input>
+            <button id='join' disabled>Join Game</button>
+        </div>
+        <div class='mode' id='mode-public'>
+            <h3 class=subtitle>Public Lobby</h3>
+            <textarea placeholder="Queue"></textarea>
+        </div>
+    </div>
+</body>
+
+</html>
