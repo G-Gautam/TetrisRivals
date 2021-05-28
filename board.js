@@ -59,7 +59,6 @@ class Board {
         if (this.valid(p)) {
             this.piece.move(p);
         } else {
-            console.log('here')
             this.freeze();
             this.clearLines();
             if (this.piece.y === 0) {

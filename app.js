@@ -40,7 +40,6 @@ initNext = () => {
         ctxNextList[i].canvas.height = 4 * BLOCK_SIZE;
         ctxNextList[i].scale(BLOCK_SIZE, BLOCK_SIZE);
     }
-    console.log(ctxNextList);
 }
 
 initNext();
