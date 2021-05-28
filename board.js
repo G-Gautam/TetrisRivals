@@ -61,7 +61,7 @@ class Board {
         } else {
             console.log('here')
             this.freeze();
-            // this.clearLines();
+            this.clearLines();
             if (this.piece.y === 0) {
                 // Game over
                 return false;
@@ -88,6 +88,42 @@ class Board {
                 }
             });
         });
+    }
+
+    clearLines = () => {
+        let lines = 0;
+
+        this.grid.forEach((row, y) => {
+            // If every value is greater than zero then we have a full row.
+            if (row.every((value) => value > 0)) {
+                lines++;
+
+                // Remove the row.
+                this.grid.splice(y, 1);
+
+                // Add zero filled row at the top.
+                this.grid.unshift(Array(COLS).fill(0));
+            }
+        });
+
+        // if (lines > 0) {
+        //   // Calculate points from cleared lines and level.
+
+        //   account.score += this.getLinesClearedPoints(lines);
+        //   account.lines += lines;
+
+        //   // If we have reached the lines for next level
+        //   if (account.lines >= LINES_PER_LEVEL) {
+        //     // Goto next level
+        //     account.level++;
+
+        //     // Remove lines so we start working for the next level
+        //     account.lines -= LINES_PER_LEVEL;
+
+        //     // Increase speed of game
+        //     time.level = LEVEL[account.level];
+        //   }
+        // }
     }
 
     getEmptyBoard = () => {

@@ -77,7 +77,7 @@ animate = (now = 0) => {
     if (time.elapsed > time.level) {
         time.start = now;
         if (!board.drop()) {
-            gameOver();
+            //gameOver();
             return;
         }
     }
