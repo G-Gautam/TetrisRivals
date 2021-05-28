@@ -6,19 +6,19 @@ class Board {
     }
 
     addBackground = () => {
-        for (let i = BLOCK_SIZE; i < ctx.canvas.width; i += BLOCK_SIZE) {
-            ctx.moveTo(i, 0);
-            ctx.lineTo(i, ctx.canvas.height);
-            ctx.strokeStyle = "rgb(255,255,255,0.1)";
-            ctx.lineWidth = 0.1;
-            ctx.stroke();
+        for (let i = BLOCK_SIZE; i < this.ctx.canvas.width; i += BLOCK_SIZE) {
+            this.ctx.moveTo(i, 0);
+            this.ctx.lineTo(i, this.ctx.canvas.height);
+            this.ctx.strokeStyle = "rgb(255,255,255,0.1)";
+            this.ctx.lineWidth = 0.1;
+            this.ctx.stroke();
         }
-        for (let i = BLOCK_SIZE; i < ctx.canvas.height; i += BLOCK_SIZE) {
-            ctx.moveTo(0, i);
-            ctx.lineTo(ctx.canvas.width, i);
-            ctx.strokeStyle = "rgba(255,255,255,0.1)";
-            ctx.lineWidth = 0.1;
-            ctx.stroke();
+        for (let i = BLOCK_SIZE; i < this.ctx.canvas.height; i += BLOCK_SIZE) {
+            this.ctx.moveTo(0, i);
+            this.ctx.lineTo(this.ctx.canvas.width, i);
+            this.ctx.strokeStyle = "rgba(255,255,255,0.1)";
+            this.ctx.lineWidth = 0.1;
+            this.ctx.stroke();
         }
     }
 
@@ -34,6 +34,44 @@ class Board {
         this.grid = this.getEmptyBoard();
         this.piece = new Piece(this.ctx);
         this.piece.setStartingPosition();
+        this.getNewPiece();
+    }
+
+    getNewPiece = () => {
+        const { width, height } = this.ctxNext.canvas;
+        this.next = new Piece(this.ctxNext);
+        this.ctxNext.clearRect(0, 0, width, height);
+        this.next.draw();
+    }
+
+    freeze = () => {
+        this.piece.shape.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value > 0) {
+                    this.grid[y + this.piece.y][x + this.piece.x] = value;
+                }
+            });
+        });
+    }
+
+    drop = () => {
+        let p = moves[KEY.DOWN](this.piece);
+        if (this.valid(p)) {
+            this.piece.move(p);
+        } else {
+            console.log('here')
+            this.freeze();
+            // this.clearLines();
+            if (this.piece.y === 0) {
+                // Game over
+                return false;
+            }
+            this.piece = this.next;
+            this.piece.ctx = this.ctx;
+            this.piece.setStartingPosition();
+            this.getNewPiece();
+        }
+        return true;
     }
 
     draw = () => {
@@ -41,7 +79,7 @@ class Board {
         this.drawBoard();
     }
 
-    drawBoard() {
+    drawBoard = () => {
         this.grid.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value > 0) {
@@ -56,16 +94,16 @@ class Board {
         return Array.from({ length: ROWS }, () => Array(COLS).fill(0))
     }
 
-    isInsideWalls(x, y) {
+    isInsideWalls = (x, y) => {
         return x >= 0 && x < COLS && y <= ROWS;
     }
 
-    notOccupied(x, y) {
+    notOccupied = (x, y) => {
         return this.grid[y] && this.grid[y][x] === 0;
     }
 
 
-    valid(p) {
+    valid = (p) => {
         return p.shape.every((row, dy) => {
             return row.every((value, dx) => {
                 let x = p.x + dx;

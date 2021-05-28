@@ -23,7 +23,7 @@ class Piece {
             });
         });
     }
-    move(p) {
+    move = (p) => {
         if (!this.hardDropped) {
             this.x = p.x;
             this.y = p.y;
@@ -31,11 +31,11 @@ class Piece {
         this.shape = p.shape;
     }
 
-    hardDrop() {
+    hardDrop = () => {
         this.hardDropped = true;
     }
 
-    setStartingPosition() {
+    setStartingPosition = () => {
         this.x = this.typeId === 4 ? 4 : 3;
     }
 

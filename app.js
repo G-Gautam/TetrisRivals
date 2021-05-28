@@ -25,7 +25,9 @@ const ctxNext = ctxNextList[0]
 const ctx = ctxList[0]
 
 let board = new Board(ctx, ctxNext);
+let board2 = new Board(ctxList[1], ctxNextList[1])
 let time = null;
+let requestId = null;
 
 const moves = {
     [KEY.SHIFT]: p => ({...p, y: p.y + 1 }),
@@ -38,19 +40,21 @@ const moves = {
 
 initNext = () => {
     // Calculate size of canvas from constants.
-    ctxNext.canvas.width = 4 * BLOCK_SIZE;
-    ctxNext.canvas.height = 4 * BLOCK_SIZE;
-    ctxNext.scale(BLOCK_SIZE, BLOCK_SIZE);
+    for (let i = 0; i < ctxNextList.length; i++) {
+        ctxNextList[i].canvas.width = 4 * BLOCK_SIZE;
+        ctxNextList[i].canvas.height = 4 * BLOCK_SIZE;
+        ctxNextList[i].scale(BLOCK_SIZE, BLOCK_SIZE);
+    }
 }
 
 initNext();
 
-function addEventListener() {
+addEventListener = () => {
     document.removeEventListener('keydown', handleKeyPress);
     document.addEventListener('keydown', handleKeyPress);
 }
 
-function handleKeyPress(event) {
+handleKeyPress = (event) => {
     if (moves[event.key]) {
         event.preventDefault();
         // Get new state
@@ -67,13 +71,6 @@ function handleKeyPress(event) {
     }
 }
 
-startGame = () => {
-    addEventListener();
-    board.reset();
-    time = { start: performance.now(), elapsed: 0 };
-    animate();
-}
-
 animate = (now = 0) => {
     time.elapsed = now - time.start;
     if (time.elapsed > time.level) {
@@ -87,4 +84,11 @@ animate = (now = 0) => {
     board.init();
     board.draw();
     requestId = requestAnimationFrame(animate);
+}
+
+startGame = () => {
+    addEventListener();
+    board.reset();
+    time = { start: performance.now(), elapsed: 0, level: 600 };
+    animate();
 }
