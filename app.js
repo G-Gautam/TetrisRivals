@@ -85,30 +85,3 @@ const moves = {
     [KEY.RIGHT]: p => ({...p, x: p.x + 1 }),
     [KEY.DOWN]: p => ({...p, y: p.y + 1 })
 };
-
-document.addEventListener('keydown', event => {
-    console.log(event.key)
-    if (moves[event.key]) {
-        // Stop the event from bubbling.
-        event.preventDefault();
-        // Get new state of piece
-        let p = moves[event.key](board.piece);
-
-        if (board.valid(p)) {
-            // If the move is valid, move the piece.
-            board.piece.move(p);
-
-            // Clear old position before drawing.
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-            board.piece.draw();
-        }
-    }
-    if (event.key === KEY.SHIFT) {
-        // Hard drop
-        while (board.valid(p)) {
-            board.piece.move(p);
-            p = moves[KEY.DOWN](board.piece);
-        }
-    }
-});
