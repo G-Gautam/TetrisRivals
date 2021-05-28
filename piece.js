@@ -36,7 +36,7 @@ class Piece {
     }
 
     setStartingPosition = () => {
-        this.x = this.typeId === 4 ? 4 : 3;
+        this.x = this.typeId === 4 ? 7 : 6;
     }
 
     randomizeTetrominoType(noOfTypes) {
