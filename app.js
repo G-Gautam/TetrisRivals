@@ -24,11 +24,6 @@ const ctxNextList = [];
 const ctxNext = ctxNextList[0]
 const ctx = ctxList[0]
 
-let board = new Board(ctx, ctxNext);
-let board2 = new Board(ctxList[1], ctxNextList[1])
-let time = null;
-let requestId = null;
-
 const moves = {
     [KEY.SHIFT]: p => ({...p, y: p.y + 1 }),
     [KEY.LEFT]: p => ({...p, x: p.x - 1 }),
@@ -45,9 +40,15 @@ initNext = () => {
         ctxNextList[i].canvas.height = 4 * BLOCK_SIZE;
         ctxNextList[i].scale(BLOCK_SIZE, BLOCK_SIZE);
     }
+    console.log(ctxNextList);
 }
 
 initNext();
+
+let board = new Board(ctx, ctxNext);
+let board2 = new Board(ctxList[1], ctxNextList[1])
+let time = null;
+let requestId = null;
 
 addEventListener = () => {
     document.removeEventListener('keydown', handleKeyPress);

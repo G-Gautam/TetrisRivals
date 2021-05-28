@@ -43,6 +43,15 @@ p {
 
 .canvas-ctn {
     display: flex;
+    align-items: flex-start;
+}
+
+#next-1 {
+    margin: 0px 40px 0px 20px;
+}
+
+#next-2 {
+    margin: 0px 20px 0px 40px;
 }
 
 .game-board {
