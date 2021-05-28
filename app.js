@@ -12,32 +12,71 @@ const ctxList = [];
     ctx.canvas.width = COLS * BLOCK_SIZE;
     ctx.canvas.height = ROWS * BLOCK_SIZE;
     ctxList.push(ctx);
-    for (let i = BLOCK_SIZE; i < ctx.canvas.width; i += BLOCK_SIZE) {
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i, ctx.canvas.height);
-        ctx.strokeStyle = "rgb(255,255,255,0.1)";
-        ctx.lineWidth = 0.1;
-        ctx.stroke();
-    }
-    for (let i = BLOCK_SIZE; i < ctx.canvas.height; i += BLOCK_SIZE) {
-        ctx.moveTo(0, i);
-        ctx.lineTo(ctx.canvas.width, i);
-        ctx.strokeStyle = "rgba(255,255,255,0.1)";
-        ctx.lineWidth = 0.1;
-        ctx.stroke();
-    }
-    // Scale blocks
-    ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 })
 
+const canvasNextList = document.getElementsByClassName('next');
+const ctxNextList = [];
+[...canvasNextList].forEach((canvas) => {
+    const ctx = canvas.getContext('2d');
+    ctxNextList.push(ctx);
+})
+
+const ctxNext = ctxNextList[0]
 const ctx = ctxList[0]
-let board = new Board();
+
+let board = new Board(ctx, ctxNext);
+
+initNext = () => {
+    // Calculate size of canvas from constants.
+    ctxNext.canvas.width = 4 * BLOCK_SIZE;
+    ctxNext.canvas.height = 4 * BLOCK_SIZE;
+    ctxNext.scale(BLOCK_SIZE, BLOCK_SIZE);
+}
+
+initNext();
+
+function addEventListener() {
+    document.removeEventListener('keydown', handleKeyPress);
+    document.addEventListener('keydown', handleKeyPress);
+}
+
+function handleKeyPress(event) {
+    if (moves[event.key]) {
+        event.preventDefault();
+        // Get new state
+        let p = moves[event.key](board.piece);
+        if (event.key === KEY.SHIFT) {
+            while (board.valid(p)) {
+                board.piece.move(p);
+                p = moves[KEY.DOWN](board.piece);
+            }
+            board.piece.hardDrop();
+        } else if (board.valid(p)) {
+            board.piece.move(p);
+        }
+    }
+}
 
 startGame = () => {
+    addEventListener();
     board.reset();
-    let piece = new Piece(ctx);
-    piece.draw();
-    board.piece = piece;
+    time = { start: performance.now(), elapsed: 0 };
+    animate();
+}
+
+animate = (now = 0) => {
+    time.elapsed = now - time.start;
+    if (time.elapsed > time.level) {
+        time.start = now;
+        if (!board.drop()) {
+            gameOver();
+            return;
+        }
+    }
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    board.init();
+    board.draw();
+    requestId = requestAnimationFrame(animate);
 }
 
 const moves = {

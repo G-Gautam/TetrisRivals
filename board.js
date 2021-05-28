@@ -5,11 +5,29 @@ class Board {
         this.init();
     }
 
-    init() {
+    addBackground = () => {
+        for (let i = BLOCK_SIZE; i < ctx.canvas.width; i += BLOCK_SIZE) {
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, ctx.canvas.height);
+            ctx.strokeStyle = "rgb(255,255,255,0.1)";
+            ctx.lineWidth = 0.1;
+            ctx.stroke();
+        }
+        for (let i = BLOCK_SIZE; i < ctx.canvas.height; i += BLOCK_SIZE) {
+            ctx.moveTo(0, i);
+            ctx.lineTo(ctx.canvas.width, i);
+            ctx.strokeStyle = "rgba(255,255,255,0.1)";
+            ctx.lineWidth = 0.1;
+            ctx.stroke();
+        }
+    }
+
+    init = () => {
         this.ctx.canvas.width = COLS * BLOCK_SIZE;
         this.ctx.canvas.height = ROWS * BLOCK_SIZE;
-
-        this.ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+        this.addBackground();
+        // Scale blocks
+        ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
     }
 
     reset = () => {
