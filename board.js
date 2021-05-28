@@ -76,7 +76,7 @@ class Board {
     }
 
     rotate = (piece, direction) => {
-        let p = JSON.parase(JSON.stringify(piece));
+        let p = JSON.parse(JSON.stringify(piece));
         if (!piece.hardDropped) {
             for (let y = 0; y < p.shape.length; ++y) {
                 for (let x = 0; x < y; ++x) {

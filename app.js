@@ -25,6 +25,16 @@ const ctxNext = ctxNextList[0]
 const ctx = ctxList[0]
 
 let board = new Board(ctx, ctxNext);
+let time = null;
+
+const moves = {
+    [KEY.SHIFT]: p => ({...p, y: p.y + 1 }),
+    [KEY.LEFT]: p => ({...p, x: p.x - 1 }),
+    [KEY.RIGHT]: p => ({...p, x: p.x + 1 }),
+    [KEY.DOWN]: p => ({...p, y: p.y + 1 }),
+    [KEY.SPACE]: p => board.rotate(p, ROTATION.RIGHT),
+    [KEY.Q]: p => board.rotate(p, ROTATION.LEFT),
+};
 
 initNext = () => {
     // Calculate size of canvas from constants.
@@ -78,10 +88,3 @@ animate = (now = 0) => {
     board.draw();
     requestId = requestAnimationFrame(animate);
 }
-
-const moves = {
-    [KEY.SHIFT]: p => ({...p, y: p.y + 1 }),
-    [KEY.LEFT]: p => ({...p, x: p.x - 1 }),
-    [KEY.RIGHT]: p => ({...p, x: p.x + 1 }),
-    [KEY.DOWN]: p => ({...p, y: p.y + 1 })
-};

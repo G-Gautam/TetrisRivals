@@ -58,6 +58,14 @@ const KEY = {
     SHIFT: 'Shift',
     LEFT: 'a',
     RIGHT: 'd',
-    DOWN: 's'
+    DOWN: 's',
+    Q: 'q',
+    SPACE: ' ',
 }
-Object.freeze(KEY);
+
+const ROTATION = {
+    LEFT: 'left',
+    RIGHT: 'right'
+};
+
+[COLORS, SHAPES, KEY, ROTATION].forEach(item => Object.freeze(item));
