@@ -55,11 +55,11 @@ const SHAPES = [
 
 
 const KEY = {
-    SHIFT: 'Shift',
+    RL: 'Shift',
     LEFT: 'a',
     RIGHT: 'd',
     DOWN: 's',
-    Q: 'q',
+    RR: 'f',
     SPACE: ' ',
 }
 

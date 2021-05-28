@@ -25,12 +25,12 @@ const ctxNext = ctxNextList[0]
 const ctx = ctxList[0]
 
 const moves = {
-    [KEY.SHIFT]: p => ({...p, y: p.y + 1 }),
+    [KEY.SPACE]: p => ({...p, y: p.y + 1 }),
     [KEY.LEFT]: p => ({...p, x: p.x - 1 }),
     [KEY.RIGHT]: p => ({...p, x: p.x + 1 }),
     [KEY.DOWN]: p => ({...p, y: p.y + 1 }),
-    [KEY.SPACE]: p => board.rotate(p, ROTATION.RIGHT),
-    [KEY.Q]: p => board.rotate(p, ROTATION.LEFT),
+    [KEY.RR]: p => board.rotate(p, ROTATION.RIGHT),
+    [KEY.RL]: p => board.rotate(p, ROTATION.LEFT),
 };
 
 initNext = () => {
@@ -59,7 +59,7 @@ handleKeyPress = (event) => {
         event.preventDefault();
         // Get new state
         let p = moves[event.key](board.piece);
-        if (event.key === KEY.SHIFT) {
+        if (event.key === KEY.SPACE) {
             while (board.valid(p)) {
                 board.piece.move(p);
                 p = moves[KEY.DOWN](board.piece);
@@ -77,6 +77,8 @@ animate = (now = 0) => {
         time.start = now;
         if (!board.drop()) {
             //gameOver();
+            let audio = document.getElementById('audio');
+            audio.pause();
             return;
         }
     }
