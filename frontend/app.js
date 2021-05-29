@@ -1,5 +1,12 @@
-startGameDummy = () => {
-    location.href = 'game.html'
+createGame = () => {
+    location.href = 'game.html';
+}
+
+createGameCode = () => {
+    var code = document.getElementById('code');
+    if (code.innerHTML == null || code.innerHTML == undefined || code.innerHTML.length == 0) {
+        sendPrivateCode();
+    }
 }
 
 //Game.html

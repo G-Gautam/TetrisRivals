@@ -89,3 +89,21 @@ button:disabled {
     font-size: 7em;
     margin: 10px 0px !important;
 }
+
+#code {
+    color: white;
+    font-size: 2em;
+    font-family: 'VT3223', monospace;
+    margin: 0px !important;
+    text-align: center;
+    font-weight: lighter;
+}
+
+#colorCode {
+    color: greenyellow;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'VT3223', monospace;
+}

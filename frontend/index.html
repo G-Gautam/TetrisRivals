@@ -17,7 +17,7 @@
     <div class='mode-selector'>
         <div class='mode' id='mode-private'>
             <h3 class=subtitle>Private Lobby</h3>
-            <button id='create' onclick="startGameDummy()">Create Game</button>
+            <button id='create' onclick="createGame()">Create Game</button>
             <div class="separator">
                 <div class="line"></div>
                 <h5 class='sep-text'>OR</h5>
@@ -31,9 +31,11 @@
             <textarea placeholder="Queue"></textarea>
         </div>
     </div>
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
     <script src="constants.js" charset="utf-8"></script>
     <script src="board.js" charset="utf-8"></script>
     <script src="piece.js" charset="utf-8"></script>
+    <script src="bridge.js" charset="utf-8"></script>
     <script src="app.js" charset="utf-8"></script>
 </body>
 
