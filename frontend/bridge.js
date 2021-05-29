@@ -33,3 +33,11 @@ socket.on('codeValid', (arg) => {
 socket.on('codeInvalid', () => {
     window.alert("Code is invalid");
 })
+
+function signalReady() {
+    socket.emit("ready", 0);
+}
+
+socket.on('updateGameState', (gamestate) => {
+    updateGameState(JSON.parse(gamestate));
+})

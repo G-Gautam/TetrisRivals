@@ -12,19 +12,24 @@ const io = require('socket.io')(server, {
     }
 });
 
+const { createGameState } = require('./game');
+
+const state = {};
+
 io.on('connection', client => {
-    client.emit('init', { data: 'hello world' })
+    const id = client.id;
     client.on("privateCode", () => {
         MongoClient.connect(url, (err, dbclient) => {
             const db = dbclient.db(dbName);
             const codeCollection = db.collection(collectionName);
             const code = Math.floor(Math.random() * 1000000);
-            codeCollection.findOne({ code: code }, (err, res) => {
+            codeCollection.findOne({ id: code }, (err, res) => {
                 if (err) throw err;
                 if (res == null || res == undefined) {
-                    codeCollection.insertOne({ code: code }, (err, res) => {
+                    codeCollection.insertOne({ id: code }, (err, res) => {
                         if (err) throw err;
                         console.log("Successful", code);
+                        state[id] = createGameState();
                         client.emit('returnPrivateCode', code);
                     })
                 } else {
@@ -39,7 +44,7 @@ io.on('connection', client => {
         MongoClient.connect(url, (err, dbclient) => {
             const db = dbclient.db(dbName);
             const codeCollection = db.collection(collectionName);
-            codeCollection.findOne({ code: parseInt(arg) }, (err, res) => {
+            codeCollection.findOne({ id: parseInt(arg) }, (err, res) => {
                 if (err) throw err;
                 if (res != null) {
                     client.emit("codeValid", arg);
@@ -50,6 +55,14 @@ io.on('connection', client => {
             })
         });
     });
+
+    client.on("ready", (player) => {
+        if (player == 0) {
+            //emit player 1
+        } else {
+            //emit player 2
+        }
+    })
 });
 
 io.listen(3000);

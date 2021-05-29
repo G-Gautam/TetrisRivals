@@ -124,9 +124,16 @@ animate = (now = 0) => {
     requestId = requestAnimationFrame(animate);
 }
 
-startGame = () => {
+ready = () => {
     addEventListener();
     board.reset();
-    time = { start: performance.now(), elapsed: 0, level: 600 };
-    animate();
+    signalReady();
+    var button = document.getElementById('ready1');
+    button.style = "background-color: rgba(172, 255, 47, 0.308)";
+    // time = { start: performance.now(), elapsed: 0, level: 600 };
+    // animate();
+}
+
+updateGameState = (gamestate) => {
+
 }
