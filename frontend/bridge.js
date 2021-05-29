@@ -11,6 +11,7 @@ function sendPrivateCode() {
 
 socket.on('returnPrivateCode', (code) => {
     if (code) {
+        sessionStorage.setItem('code', code);
         var codeText = document.getElementById('code');
         codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${code}`;
     }
@@ -18,4 +19,17 @@ socket.on('returnPrivateCode', (code) => {
 
 socket.on('retryCode', () => {
     sendPrivateCode();
+})
+
+
+function isCodeValid(code) {
+    socket.emit('checkCode', code);
+}
+
+socket.on('codeValid', (arg) => {
+    codeValidAction(arg);
+});
+
+socket.on('codeInvalid', () => {
+    window.alert("Code is invalid");
 })

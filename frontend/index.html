@@ -11,7 +11,7 @@
     <title>Tetris Rivals</title>
 </head>
 
-<body>
+<body onload="setup()">
     <audio src="Assets/backgroundMusic.mp3" autoplay loop></audio>
     <h1 class='title'>Tetris Rivals</h1>
     <div class='mode-selector'>
@@ -23,8 +23,8 @@
                 <h5 class='sep-text'>OR</h5>
                 <div class="line"></div>
             </div>
-            <input placeholder="Code" class=code-input>
-            <button id='join' disabled>Join Game</button>
+            <input placeholder="Code" id=code-input class=code-input>
+            <button id='join' onclick=joinGame() disabled>Join Game</button>
         </div>
         <div class='mode' id='mode-public'>
             <h3 class=subtitle>Public Lobby</h3>

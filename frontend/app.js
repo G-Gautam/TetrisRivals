@@ -2,10 +2,39 @@ createGame = () => {
     location.href = 'game.html';
 }
 
-createGameCode = () => {
-    var code = document.getElementById('code');
-    if (code.innerHTML == null || code.innerHTML == undefined || code.innerHTML.length == 0) {
-        sendPrivateCode();
+setup = () => {
+    const codeInput = document.getElementById('code-input');
+
+    if (codeInput !== null || codeInput !== undefined) {
+        codeInput.addEventListener('input', () => {
+            if (codeInput.value.length == 6) {
+                document.getElementById('join').disabled = false;
+            } else {
+                document.getElementById('join').disabled = true;
+            }
+        });
+    }
+}
+
+joinGame = () => {
+    const code = document.getElementById('code-input').value;
+    isCodeValid(code);
+}
+
+codeValidAction = (arg) => {
+    sessionStorage.setItem("codeJoin", arg);
+    location.href = 'game.html'
+}
+
+
+startGameWaiting = () => {
+    sessionStorage.removeItem('code');
+    const code = sessionStorage.getItem('codeJoin');
+    if (code == null || code == undefined) {
+        sendPrivateCode()
+    } else {
+        var codeText = document.getElementById('code');
+        codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${code}`;
     }
 }
 
