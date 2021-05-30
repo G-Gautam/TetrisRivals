@@ -100,6 +100,16 @@ const moves = {
     [KEY.RL]: p => board.rotate(p, ROTATION.LEFT),
 };
 
+const shapeSwitch = {
+    [KEY.ONE]: 1,
+    [KEY.TWO]: 2,
+    [KEY.THREE]: 3,
+    [KEY.FOUR]: 4,
+    [KEY.FIVE]: 5,
+    [KEY.SIX]: 6,
+    [KEY.SEVEN]: 7,
+}
+
 function initNext() {
     // Calculate size of canvas from constants.
     for (let i = 0; i < ctxNextList.length; i++) {
@@ -108,7 +118,6 @@ function initNext() {
         ctxNextList[i].scale(BLOCK_SIZE, BLOCK_SIZE);
     }
 }
-
 
 
 function addEventListener() {
@@ -130,6 +139,18 @@ function handleKeyPress(event) {
         } else if (board.valid(p)) {
             board.piece.move(p);
         }
+    }
+}
+
+document.onmousedown = function(event) {
+    if (event.ctrlKey) {
+        let piece = board2.getPiece();
+        let id = piece.typeId + 1;
+        if (id === 7) {
+            id = 0
+        }
+        piece.completePiece(COLORS[id], piece.hardDropped, SHAPES[id], id, piece.x, piece.y);
+        bridgeChangePiece(piece);
     }
 }
 
@@ -178,6 +199,14 @@ function updateOpponent(state) {
     ctxList[1].clearRect(0, 0, ctxList[1].canvas.width, ctxList[1].canvas.height);
     board2.init();
     board2.draw();
+}
+
+function changeSelf(state) {
+    if (state.piece) {
+        let piece = new Piece(ctx);
+        piece.completePiece(state.piece.color, state.piece.hardDropped, state.piece.shape, state.piece.typeId, state.piece.x, state.piece.y);
+        board.setPiece(piece);
+    }
 }
 
 function startAnimation() {

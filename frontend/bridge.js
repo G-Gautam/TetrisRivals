@@ -10,6 +10,7 @@ socket.on('codeInvalid', invalidCodeAlert);
 socket.on('tooManyPlayers', roomFullAlert);
 socket.on('gameState', updateGameState);
 socket.on('startGame', startGame);
+socket.on('pieceChanged', pieceChanged);
 
 
 function bridgeCreateGame() {
@@ -30,6 +31,10 @@ function bridgeUpdateBoard(board) {
 
 function bridgeUpdatePiece(piece) {
     socket.emit('updatePiece', piece, playerNum, sessionStorage.getItem('code'));
+}
+
+function bridgeChangePiece(piece) {
+    socket.emit('changePiece', piece, playerNum, sessionStorage.getItem('code'));
 }
 
 function bridgeUpdateNextPiece(next) {
@@ -63,6 +68,15 @@ function updateGameState(state) {
         state = state.players[0];
     }
     updateOpponent(state)
+}
+
+function pieceChanged(state) {
+    if (playerNum == 1) {
+        state = state.players[0];
+    } else {
+        state = state.players[1];
+    }
+    changeSelf(state)
 }
 
 function startGame() {

@@ -15,7 +15,6 @@ const COLORS = [
 ];
 
 const SHAPES = [
-    [],
     [
         [0, 0, 0, 0],
         [1, 1, 1, 1],
@@ -61,6 +60,13 @@ const KEY = {
     DOWN: 's',
     RR: 'f',
     SPACE: ' ',
+    ONE: 1,
+    TWO: 2,
+    THREE: 3,
+    FOUR: 4,
+    FIVE: 5,
+    SIX: 6,
+    SEVEN: 7,
 }
 
 const ROTATION = {
