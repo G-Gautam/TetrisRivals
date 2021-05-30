@@ -4,13 +4,7 @@
 }
 
 body {
-    margin: 0px;
-    min-height: 100vh;
-    min-width: 100vw
-}
-
-#body {
-    min-height: 100vh;
+    margin: 0px !important;
 }
 
 #index {
@@ -23,6 +17,8 @@ body {
     text-align: center;
     color: white;
     font-size: 7em;
+    margin-top: 0px !important;
+    padding: 20px;
 }
 
 .mode-selector {
