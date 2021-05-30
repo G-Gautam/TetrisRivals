@@ -149,11 +149,17 @@ function handleKeyPress(event) {
 document.onmousedown = function(event) {
     if (event.ctrlKey) {
         let piece = board2.getPiece();
+        if (!piece) {
+            return;
+        }
         let id = piece.typeId + 1;
         if (id === 7) {
             id = 0
         }
         piece.completePiece(COLORS[id], piece.hardDropped, SHAPES[id], id, piece.x, piece.y);
+        if (!board.valid(piece)) {
+            return;
+        }
         bridgeChangePiece(piece);
     }
 }

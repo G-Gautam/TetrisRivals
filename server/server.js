@@ -1,7 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://admin:Nyancat12!@172.105.0.175:27017';
-const dbName = 'tetris';
-const collectionName = 'codes';
+require('dotenv').config();
+
+const url = process.env.DB_CONNECTION;
+const dbName = process.env.DB_NAME;
+const collectionName = process.env.DB_COLLECTION;
 
 const { Server } = require("socket.io");
 const io = new Server({
@@ -9,6 +11,8 @@ const io = new Server({
         origin: '*'
     }
 });
+
+
 
 const { createGameState } = require('./game');
 
