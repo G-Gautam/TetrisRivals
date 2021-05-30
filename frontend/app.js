@@ -29,11 +29,6 @@ function joinGame() {
     bridgeJoinGame(code);
 }
 
-function codeValidActionarg() {
-    sessionStorage.setItem("codeJoin", arg);
-    location.href = 'game.html'
-}
-
 
 function loadCode() {
     const code = sessionStorage.getItem('code');
@@ -157,9 +152,9 @@ document.onmousedown = function(event) {
             id = 0
         }
         piece.completePiece(COLORS[id], piece.hardDropped, SHAPES[id], id, piece.x, piece.y);
-        if (!board.valid(piece)) {
-            return;
-        }
+        // if (!board.valid(piece)) {
+        //     return;
+        // }
         bridgeChangePiece(piece);
     }
 }
@@ -169,7 +164,7 @@ function animate(now = 0) {
     if (time.elapsed > time.level) {
         time.start = now;
         if (!board.drop()) {
-            //gameOver();
+            bridgeGameOver();
             let audio = document.getElementById('audio');
             audio.pause();
             return;

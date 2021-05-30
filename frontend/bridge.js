@@ -11,7 +11,7 @@ socket.on('tooManyPlayers', roomFullAlert);
 socket.on('gameState', updateGameState);
 socket.on('startGame', startGame);
 socket.on('pieceChanged', pieceChanged);
-
+socket.on('gameEnd', handleGameEnd);
 
 function bridgeCreateGame() {
     socket.emit('createGame');
@@ -39,6 +39,11 @@ function bridgeChangePiece(piece) {
 
 function bridgeUpdateNextPiece(next) {
     socket.emit('updateNextPiece', next, playerNum, sessionStorage.getItem('code'));
+}
+
+function bridgeGameOver() {
+    socket.emit('gameOver', playerNum, sessionStorage.getItem('code'));
+    window.alert('YOU LOSE!');
 }
 
 function handleNewAndJoinGame(data) {
@@ -81,4 +86,11 @@ function pieceChanged(state) {
 
 function startGame() {
     startAnimation();
+}
+
+function handleGameEnd(winner) {
+    if (winner == playerNum) {
+        window.alert("YOU WIN");
+    }
+    window.cancelAnimationFrame(requestId);
 }
