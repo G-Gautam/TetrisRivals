@@ -87,6 +87,7 @@ class Board {
                 }
             });
         });
+        bridgeUpdateServer(board.grid);
     }
 
     clearLines = () => {
@@ -104,6 +105,7 @@ class Board {
                 this.grid.unshift(Array(COLS).fill(0));
             }
         });
+        bridgeUpdateServer(board.grid);
 
         // if (lines > 0) {
         //   // Calculate points from cleared lines and level.

@@ -4,10 +4,15 @@ module.exports = {
 
 function createGameState() {
     const gameState = {
-        ready: {
-            player1: false,
-            player2: false
-        }
+        players: [{
+                ready: false,
+                board: null,
+            },
+            {
+                ready: false,
+                board: null,
+            }
+        ]
     }
     return gameState;
 }

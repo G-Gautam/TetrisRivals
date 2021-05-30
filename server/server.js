@@ -18,6 +18,8 @@ io.on('connection', client => {
     const id = client.id;
     client.on("createGame", createGame);
     client.on("joinGame", joinGame);
+    client.on("ready", ready);
+    client.on("updatePosition", updatePosition);
 
     function createGame() {
         MongoClient.connect(url, (err, dbclient) => {
@@ -31,7 +33,7 @@ io.on('connection', client => {
                         if (err) throw err;
                         console.log("Successful", code);
 
-                        state[id] = createGameState();
+                        state[code] = createGameState();
                         client.join(code.toString());
                         client.number = 100;
                         let data = {
@@ -93,13 +95,45 @@ io.on('connection', client => {
         });
     }
 
-    client.on("ready", (player) => {
-        if (player == 0) {
-            //emit player 1
-        } else {
-            //emit player 2
-        }
-    })
+    function ready(playerNum) {
+        MongoClient.connect(url, (err, dbclient) => {
+            const db = dbclient.db(dbName);
+            const codeCollection = db.collection(collectionName);
+            codeCollection.findOne({ cid: id }, (err, res) => {
+                if (err) throw err;
+                const code = res.code;
+                if (playerNum == 1) {
+                    state[code].players[0].ready = true;
+                    io.to(code.toString()).emit('gameState', state[code]);
+                } else {
+                    state[code].players[1].ready = true;
+                    io.to(code.toString()).emit('gameState', state[code]);
+                }
+                if (state[code].players[0].ready && state[code].players[1].ready) {
+                    io.to(code.toString()).emit('startGame');
+                }
+                dbclient.close();
+            })
+        });
+    }
+
+    function updatePosition(board, playerNum) {
+        MongoClient.connect(url, (err, dbclient) => {
+            const db = dbclient.db(dbName);
+            const codeCollection = db.collection(collectionName);
+            codeCollection.findOne({ cid: id }, (err, res) => {
+                if (err) throw err;
+                const code = res.code;
+                if (playerNum == 1) {
+                    state[code].players[0].board = board;
+                    io.to(code.toString()).emit('gameState', state[code]);
+                } else {
+                    state[code].players[1].board = board;
+                    io.to(code.toString()).emit('gameState', state[code]);
+                }
+            });
+        });
+    }
 });
 
 io.listen(3000);

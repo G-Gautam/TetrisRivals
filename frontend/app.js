@@ -1,6 +1,5 @@
 //Homepage button and input initialization
-setup = () => {
-    bridgeSetup();
+function setup() {
     const codeInput = document.getElementById('code-input');
     if (codeInput !== null || codeInput !== undefined) {
         codeInput.addEventListener('input', () => {
@@ -11,30 +10,28 @@ setup = () => {
             }
         });
     }
-    //Remove game screen
-    document.getElementById('game').remove();
 }
 
 //Create a new game
-createGame = () => {
+function createGame() {
     sessionStorage.clear();
     bridgeCreateGame();
 }
 
 //Join an existing game with code
-joinGame = () => {
+function joinGame() {
     const codeInput = document.getElementById('code-input');
     const code = codeInput.value;
     bridgeJoinGame(code);
 }
 
-codeValidAction = (arg) => {
+function codeValidActionarg() {
     sessionStorage.setItem("codeJoin", arg);
     location.href = 'game.html'
 }
 
 
-loadCode = () => {
+function loadCode() {
     const code = sessionStorage.getItem('code');
     var codeText = document.getElementById('code');
     codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${code}`;
@@ -46,7 +43,21 @@ let ctxList;
 let canvasNextList;
 let ctxNext;
 
-onGameLoad = () => {
+let board;
+let board2;
+let time;
+let requestId;
+
+
+function ready() {
+    addEventListener();
+    board.reset();
+    bridgeReady();
+    var button = document.getElementById('ready1');
+    button.style = "background-color: rgba(172, 255, 47, 0.308)";
+}
+
+function onGameLoad() {
     canvasList = document.getElementsByClassName('game-board');
     ctxList = [];
     [...canvasList].forEach((canvas) => {
@@ -66,8 +77,18 @@ onGameLoad = () => {
 
     ctxNext = ctxNextList[0]
     ctx = ctxList[0]
+
+    board = new Board(ctx, ctxNext);
+    board2 = new Board(ctxList[1], ctxNextList[1])
+    time = null;
+    requestId = null;
+
     loadCode();
+    initNext();
+    let readyButton = document.getElementById('ready1');
+    readyButton.onclick = ready;
 }
+
 
 const moves = {
     [KEY.SPACE]: p => ({...p, y: p.y + 1 }),
@@ -78,7 +99,7 @@ const moves = {
     [KEY.RL]: p => board.rotate(p, ROTATION.LEFT),
 };
 
-initNext = () => {
+function initNext() {
     // Calculate size of canvas from constants.
     for (let i = 0; i < ctxNextList.length; i++) {
         ctxNextList[i].canvas.width = 4 * BLOCK_SIZE;
@@ -87,19 +108,14 @@ initNext = () => {
     }
 }
 
-initNext();
 
-let board = new Board(ctx, ctxNext);
-let board2 = new Board(ctxList[1], ctxNextList[1])
-let time = null;
-let requestId = null;
 
-addEventListener = () => {
+function addEventListener() {
     document.removeEventListener('keydown', handleKeyPress);
     document.addEventListener('keydown', handleKeyPress);
 }
 
-handleKeyPress = (event) => {
+function handleKeyPress(event) {
     if (moves[event.key]) {
         event.preventDefault();
         // Get new state
@@ -113,10 +129,11 @@ handleKeyPress = (event) => {
         } else if (board.valid(p)) {
             board.piece.move(p);
         }
+        // bridgeUpdateServer(board.grid);
     }
 }
 
-animate = (now = 0) => {
+function animate(now = 0) {
     time.elapsed = now - time.start;
     if (time.elapsed > time.level) {
         time.start = now;
@@ -133,16 +150,19 @@ animate = (now = 0) => {
     requestId = requestAnimationFrame(animate);
 }
 
-ready = () => {
-    addEventListener();
-    board.reset();
-    signalReady();
-    var button = document.getElementById('ready1');
-    button.style = "background-color: rgba(172, 255, 47, 0.308)";
-    // time = { start: performance.now(), elapsed: 0, level: 600 };
-    // animate();
+
+function updateOpponent(state) {
+    let readyButton = document.getElementById('ready2');
+    if (state.ready == true) {
+        readyButton.innerHTML = "Ready";
+        readyButton.disabled = false;
+        readyButton.style = "background-color: rgba(172, 255, 47, 0.308)";
+    }
+    board2.grid = state.board;
+    board2.drawBoard();
 }
 
-updateGameState = (gamestate) => {
-
+function startAnimation() {
+    time = { start: performance.now(), elapsed: 0, level: 600 };
+    animate();
 }
