@@ -3,10 +3,10 @@ let playerNum;
 
 function bridgeSetup() {
     socket = io('http://localhost:3000');
-    socket.on("gameCreated", handleNewGame);
+    socket.on("gameCreated", handleNewAndJoinGame);
     //Try again (Makeshift recursion)
     socket.on('codeExists', bridgeCreateGame);
-    socket.on('joinSuccessful', joinGame);
+    socket.on('joinSuccessful', handleNewAndJoinGame);
     socket.on('codeInvalid', invalidCodeAlert);
     socket.on('tooManyPlayers', roomFullAlert);
 }
@@ -19,18 +19,16 @@ function bridgeJoinGame(code) {
     socket.emit('joinGame', code);
 }
 
-function handleNewGame(data) {
+function handleNewAndJoinGame(data) {
     playerNum = data.playerNum;
     sessionStorage.setItem('code', data.code);
     let indexPage = document.getElementById('index');
-    let gamePage = document.getElementById('game');
+    let gamePage = document.createElement('div');
+    gamePage.innerHTML = gameString.trim();
     let body = document.getElementById('body');
     indexPage.remove();
     body.appendChild(gamePage);
-}
-
-function joinGame() {
-
+    onGameLoad();
 }
 
 function invalidCodeAlert() {

@@ -41,26 +41,33 @@ loadCode = () => {
 }
 
 //Game.html
+let canvasList;
+let ctxList;
+let canvasNextList;
+let ctxNext;
 
-const canvasList = document.getElementsByClassName('game-board');
-const ctxList = [];
-[...canvasList].forEach((canvas) => {
-    const ctx = canvas.getContext('2d');
-    // Calculate size of canvas from constants.
-    ctx.canvas.width = COLS * BLOCK_SIZE;
-    ctx.canvas.height = ROWS * BLOCK_SIZE;
-    ctxList.push(ctx);
-})
+onGameLoad = () => {
+    canvasList = document.getElementsByClassName('game-board');
+    ctxList = [];
+    [...canvasList].forEach((canvas) => {
+        const ctx = canvas.getContext('2d');
+        // Calculate size of canvas from constants.
+        ctx.canvas.width = COLS * BLOCK_SIZE;
+        ctx.canvas.height = ROWS * BLOCK_SIZE;
+        ctxList.push(ctx);
+    })
 
-const canvasNextList = document.getElementsByClassName('next');
-const ctxNextList = [];
-[...canvasNextList].forEach((canvas) => {
-    const ctx = canvas.getContext('2d');
-    ctxNextList.push(ctx);
-})
+    canvasNextList = document.getElementsByClassName('next');
+    ctxNextList = [];
+    [...canvasNextList].forEach((canvas) => {
+        const ctx = canvas.getContext('2d');
+        ctxNextList.push(ctx);
+    })
 
-const ctxNext = ctxNextList[0]
-const ctx = ctxList[0]
+    ctxNext = ctxNextList[0]
+    ctx = ctxList[0]
+    loadCode();
+}
 
 const moves = {
     [KEY.SPACE]: p => ({...p, y: p.y + 1 }),

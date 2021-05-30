@@ -16,7 +16,6 @@ const state = {};
 
 io.on('connection', client => {
     const id = client.id;
-    console.log(id);
     client.on("createGame", createGame);
     client.on("joinGame", joinGame);
 
@@ -35,7 +34,6 @@ io.on('connection', client => {
                         state[id] = createGameState();
                         client.join(code.toString());
                         client.number = 100;
-                        console.log("Rooms", client.server.sockets.adapter.rooms);
                         let data = {
                             code: code,
                             playerNum: 1,
@@ -58,40 +56,42 @@ io.on('connection', client => {
             codeCollection.findOne({ code: parseInt(code) }, (err, res) => {
                 if (err) throw err;
                 if (res != null) {
-                    const room = client.server.sockets.adapter.rooms[code];
-                    let allPlayers;
-                    if (room) {
-                        allPlayers = room.sockets;
-                    }
-                    console.log(client.sockets);
+                    const room = io.sockets.adapter.rooms.get(code);
                     let numPlayers = 0;
-                    if (allPlayers) {
-                        numPlayers = Object.keys(allPlayers).length;
+                    if (room) {
+                        numPlayers = room.size;
                     }
                     if (numPlayers === 0) {
                         console.log('No users in the game');
                         client.emit("codeInvalid");
+                        dbclient.close();
                         return;
                     } else if (numPlayers > 1) {
                         console.log("Too many users in the game");
                         client.emit("tooManyPlayers");
+                        dbclient.close();
                         return;
                     } else {
+                        codeCollection.insertOne({ cid: id, code: code }, (err, res) => {
+                            if (err) throw err;
+                            console.log("Successful Join", code);
+                            dbclient.close();
+                        });
                         client.number = 2;
                         client.join(code);
-                        client.emit("codeValid");
+                        let data = {
+                            code: code,
+                            playerNum: 2,
+                        }
+                        client.emit("joinSuccessful", data);
                     }
                 } else {
                     client.emit("codeInvalid");
+                    dbclient.close();
                 }
-                dbclient.close();
             })
         });
     }
-
-    client.on('disconnect', (reason) => {
-        console.log(reason);
-    })
 
     client.on("ready", (player) => {
         if (player == 0) {
