@@ -147,6 +147,7 @@ function animate(now = 0) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     board.init();
     board.draw();
+    bridgeUpdatePiece(board.getPiece());
     bridgeUpdateBoard(board.getGrid());
     requestId = requestAnimationFrame(animate);
 }
@@ -160,12 +161,11 @@ function updateOpponent(state) {
         readyButton.style = "background-color: rgba(172, 255, 47, 0.308)";
     }
     board2.setGrid(state.board);
-
-    // if (state.piece) {
-    //     let piece = new Piece(ctxList[1]);
-    //     piece.completePiece(state.piece.color, state.piece.hardDropped, state.piece.shape, state.piece.typeId, state.piece.x, state.piece.y);
-    //     board2.setPiece(piece);
-    // }
+    if (state.piece) {
+        let piece = new Piece(ctxList[1]);
+        piece.completePiece(state.piece.color, state.piece.hardDropped, state.piece.shape, state.piece.typeId, state.piece.x, state.piece.y);
+        board2.setPiece(piece);
+    }
     ctxList[1].clearRect(0, 0, ctxList[1].canvas.width, ctxList[1].canvas.height);
     board2.init();
     board2.draw();
