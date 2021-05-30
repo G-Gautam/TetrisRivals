@@ -147,6 +147,7 @@ function animate(now = 0) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     board.init();
     board.draw();
+    bridgeUpdateBoard(board.getGrid());
     requestId = requestAnimationFrame(animate);
 }
 

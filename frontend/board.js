@@ -98,7 +98,6 @@ class Board {
                     }
                 });
             });
-            bridgeUpdateBoard(this.grid);
         }
     }
 
