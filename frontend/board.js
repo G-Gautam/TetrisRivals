@@ -65,9 +65,6 @@ class Board {
         } else {
             let freeze = this.freeze();
             let lines = this.clearLines();
-            // if (freeze || lines) {
-            //     bridgeUpdateServer(this.grid);
-            // }
             if (this.piece.y === 0) {
                 // Game over
                 return false;
@@ -83,7 +80,6 @@ class Board {
     draw = () => {
         if (this.piece) {
             this.piece.draw();
-            // bridgeUpdatePiece(this.piece);
         }
         this.drawBoard();
     }
@@ -93,7 +89,7 @@ class Board {
             this.grid.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value > 0) {
-                        this.ctx.fillStyle = COLORS[value];
+                        this.ctx.fillStyle = COLORS[value == 1 ? 6 : value - 1];
                         this.ctx.fillRect(x, y, 1, 1);
                     }
                 });
