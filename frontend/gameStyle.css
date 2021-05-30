@@ -1,20 +1,17 @@
-html {
-    background: url('Assets/background-game.jpg') no-repeat center center fixed;
-    background-size: cover;
-}
-
 * {
     box-sizing: border-box;
     font-family: 'VT3223', monospace;
 }
 
-body {
+#game {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
     min-height: 100vh;
     margin: 0px !important;
+    background: url('Assets/background-game.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 p {

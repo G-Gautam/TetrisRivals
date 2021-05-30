@@ -11,6 +11,8 @@ setup = () => {
             }
         });
     }
+    //Remove game screen
+    document.getElementById('game').remove();
 }
 
 //Create a new game

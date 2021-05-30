@@ -22,7 +22,11 @@ function bridgeJoinGame(code) {
 function handleNewGame(data) {
     playerNum = data.playerNum;
     sessionStorage.setItem('code', data.code);
-    location.href = 'game.html';
+    let indexPage = document.getElementById('index');
+    let gamePage = document.getElementById('game');
+    let body = document.getElementById('body');
+    indexPage.remove();
+    body.appendChild(gamePage);
 }
 
 function joinGame() {
