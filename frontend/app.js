@@ -1,3 +1,7 @@
+window.onresize = () => {
+    BLOCK_SIZE = window.innerWidth / 100;
+}
+
 //Homepage button and input initialization
 function setup() {
     const codeInput = document.getElementById('code-input');
