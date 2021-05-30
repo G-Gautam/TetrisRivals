@@ -12,6 +12,10 @@ const io = new Server({
     }
 });
 
+const httpProxy = require("http-proxy");
+
+httpProxy.createProxyServer({ target: "http://localhost:3000", ws: true }).listen(80);
+
 
 
 const { createGameState } = require('./game');
@@ -20,6 +24,7 @@ const state = {};
 
 io.on('connection', client => {
     const id = client.id;
+    console.log(id);
     client.on("createGame", createGame);
     client.on("joinGame", joinGame);
     client.on("ready", ready);
