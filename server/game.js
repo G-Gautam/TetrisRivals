@@ -9,4 +9,5 @@ function createGameState() {
             player2: false
         }
     }
+    return gameState;
 }

@@ -18,43 +18,77 @@ const state = {};
 
 io.on('connection', client => {
     const id = client.id;
-    client.on("privateCode", () => {
+    client.on("createGame", createGame);
+    client.on("joinGame", joinGame);
+
+    function createGame() {
         MongoClient.connect(url, (err, dbclient) => {
             const db = dbclient.db(dbName);
             const codeCollection = db.collection(collectionName);
             const code = Math.floor(Math.random() * 1000000);
-            codeCollection.findOne({ id: code }, (err, res) => {
+            codeCollection.findOne({ cid: id, code: code }, (err, res) => {
                 if (err) throw err;
-                if (res == null || res == undefined) {
-                    codeCollection.insertOne({ id: code }, (err, res) => {
+                if (res == null) {
+                    codeCollection.insertOne({ cid: id, code: code }, (err, res) => {
                         if (err) throw err;
                         console.log("Successful", code);
+
                         state[id] = createGameState();
-                        client.emit('returnPrivateCode', code);
+                        client.join(code);
+                        client.number = 1;
+
+                        let data = {
+                            code: code,
+                            playerNum: 1,
+                        }
+
+                        client.emit('gameCreated', data);
+                        dbclient.close();
                     })
                 } else {
-                    client.emit('retryCode')
+                    client.emit("codeExists");
                 }
-                dbclient.close()
             })
-
         })
-    })
-    client.on("checkCode", (arg) => {
+    }
+
+    function joinGame(code) {
         MongoClient.connect(url, (err, dbclient) => {
             const db = dbclient.db(dbName);
             const codeCollection = db.collection(collectionName);
-            codeCollection.findOne({ id: parseInt(arg) }, (err, res) => {
+            codeCollection.findOne({ code: parseInt(code) }, (err, res) => {
                 if (err) throw err;
                 if (res != null) {
-                    client.emit("codeValid", arg);
+                    client.emit("codeValid", code);
+                    const room = client.sockets.adapter.rooms[code];
+                    let allPlayers;
+                    if (room) {
+                        allPlayers = room.sockets;
+                    }
+                    let numPlayers = 0;
+                    if (allPlayers) {
+                        numPlayers = Object.keys(allPlayers).length;
+                    }
+                    if (numPlayers === 0) {
+                        console.log('No users in the game');
+                        client.emit("codeInvalid");
+                        return;
+                    } else if (numPlayers > 1) {
+                        console.log("Too many users in the game");
+                        client.emit("tooManyPlayers");
+                        return;
+                    } else {
+                        client.number = 2;
+                        client.join(code);
+                        client.emit("codeValid");
+                    }
                 } else {
                     client.emit("codeInvalid");
                 }
                 dbclient.close();
             })
         });
-    });
+    }
 
     client.on("ready", (player) => {
         if (player == 0) {

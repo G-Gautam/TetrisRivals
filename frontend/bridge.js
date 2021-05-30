@@ -1,29 +1,28 @@
 const socket = io('http://localhost:3000');
-socket.on('init', handleInit);
+let playerNum;
 
-function handleInit(msg) {
-    console.log(msg);
-}
+socket.on("gameCreated", handleNewGame);
+//Try again (Makeshift recursion)
+socket.on('codeExists', bridgeCreateGame);
 
-function sendPrivateCode() {
-    socket.emit("privateCode");
-}
-
-socket.on('returnPrivateCode', (code) => {
-    if (code) {
-        sessionStorage.setItem('code', code);
-        var codeText = document.getElementById('code');
-        codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${code}`;
-    }
+socket.on('test', () => {
+    console.log("test");
 })
 
-socket.on('retryCode', () => {
-    sendPrivateCode();
-})
+function handleNewGame(data) {
+    playerNum = data.playerNum;
+    sessionStorage.setItem('code', data.code);
+    location.href = 'game.html';
+    // var codeText = document.getElementById('code');
+    // codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${data.code}`;
+}
 
+function bridgeCreateGame() {
+    socket.emit('createGame');
+}
 
-function isCodeValid(code) {
-    socket.emit('checkCode', code);
+function bridgeJoinGame(code) {
+    socket.emit('joinGame', code);
 }
 
 socket.on('codeValid', (arg) => {
@@ -32,6 +31,10 @@ socket.on('codeValid', (arg) => {
 
 socket.on('codeInvalid', () => {
     window.alert("Code is invalid");
+})
+
+socket.on('tooManyPlayers', () => {
+    window.alert("Too many players in the game");
 })
 
 function signalReady() {

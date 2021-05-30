@@ -1,10 +1,6 @@
-createGame = () => {
-    location.href = 'game.html';
-}
-
+//Homepage button and input initialization
 setup = () => {
     const codeInput = document.getElementById('code-input');
-
     if (codeInput !== null || codeInput !== undefined) {
         codeInput.addEventListener('input', () => {
             if (codeInput.value.length == 6) {
@@ -16,9 +12,17 @@ setup = () => {
     }
 }
 
+//Create a new game
+createGame = () => {
+    sessionStorage.clear();
+    bridgeCreateGame();
+}
+
+//Join an existing game with code
 joinGame = () => {
-    const code = document.getElementById('code-input').value;
-    isCodeValid(code);
+    const codeInput = document.getElementById('code-input');
+    const code = codeInput.value;
+    bridgeJoinGame(code);
 }
 
 codeValidAction = (arg) => {
@@ -27,15 +31,10 @@ codeValidAction = (arg) => {
 }
 
 
-startGameWaiting = () => {
-    sessionStorage.removeItem('code');
-    const code = sessionStorage.getItem('codeJoin');
-    if (code == null || code == undefined) {
-        sendPrivateCode()
-    } else {
-        var codeText = document.getElementById('code');
-        codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${code}`;
-    }
+loadCode = () => {
+    const code = sessionStorage.getItem('code');
+    var codeText = document.getElementById('code');
+    codeText.innerHTML = `<span id=colorCode><b>Code</b></span> <br> ${code}`;
 }
 
 //Game.html
