@@ -1,12 +1,10 @@
-var app = require('express')();
-var server = require('http').Server(app);
-
 const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://admin:Nyancat12!@172.105.0.175:27017';
 const dbName = 'tetris';
 const collectionName = 'codes';
 
-const io = require('socket.io')(server, {
+const { Server } = require("socket.io");
+const io = new Server({
     cors: {
         origin: '*'
     }
@@ -18,6 +16,7 @@ const state = {};
 
 io.on('connection', client => {
     const id = client.id;
+    console.log(id);
     client.on("createGame", createGame);
     client.on("joinGame", joinGame);
 
@@ -34,9 +33,9 @@ io.on('connection', client => {
                         console.log("Successful", code);
 
                         state[id] = createGameState();
-                        client.join(code);
-                        client.number = 1;
-
+                        client.join(code.toString());
+                        client.number = 100;
+                        console.log("Rooms", client.server.sockets.adapter.rooms);
                         let data = {
                             code: code,
                             playerNum: 1,
@@ -59,12 +58,12 @@ io.on('connection', client => {
             codeCollection.findOne({ code: parseInt(code) }, (err, res) => {
                 if (err) throw err;
                 if (res != null) {
-                    client.emit("codeValid", code);
-                    const room = client.sockets.adapter.rooms[code];
+                    const room = client.server.sockets.adapter.rooms[code];
                     let allPlayers;
                     if (room) {
                         allPlayers = room.sockets;
                     }
+                    console.log(client.sockets);
                     let numPlayers = 0;
                     if (allPlayers) {
                         numPlayers = Object.keys(allPlayers).length;
@@ -89,6 +88,10 @@ io.on('connection', client => {
             })
         });
     }
+
+    client.on('disconnect', (reason) => {
+        console.log(reason);
+    })
 
     client.on("ready", (player) => {
         if (player == 0) {

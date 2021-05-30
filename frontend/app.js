@@ -1,5 +1,6 @@
 //Homepage button and input initialization
 setup = () => {
+    bridgeSetup();
     const codeInput = document.getElementById('code-input');
     if (codeInput !== null || codeInput !== undefined) {
         codeInput.addEventListener('input', () => {
