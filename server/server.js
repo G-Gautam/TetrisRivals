@@ -21,6 +21,7 @@ io.on('connection', client => {
     client.on("ready", ready);
     client.on("updateBoard", updateBoard);
     client.on("updatePiece", updatePiece);
+    client.on("updateNextPiece", updateNextPiece);
 
     function createGame() {
         MongoClient.connect(url, (err, dbclient) => {
@@ -134,6 +135,16 @@ io.on('connection', client => {
             io.to(code.toString()).emit('gameState', state[code]);
         } else {
             state[code].players[1].piece = piece;
+            io.to(code.toString()).emit('gameState', state[code]);
+        }
+    }
+
+    function updateNextPiece(piece, playerNum, code) {
+        if (playerNum == 1) {
+            state[code].players[0].nextPiece = piece;
+            io.to(code.toString()).emit('gameState', state[code]);
+        } else {
+            state[code].players[1].nextPiece = piece;
             io.to(code.toString()).emit('gameState', state[code]);
         }
     }

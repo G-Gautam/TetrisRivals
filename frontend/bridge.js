@@ -32,6 +32,10 @@ function bridgeUpdatePiece(piece) {
     socket.emit('updatePiece', piece, playerNum, sessionStorage.getItem('code'));
 }
 
+function bridgeUpdateNextPiece(next) {
+    socket.emit('updateNextPiece', next, playerNum, sessionStorage.getItem('code'));
+}
+
 function handleNewAndJoinGame(data) {
     playerNum = data.playerNum;
     sessionStorage.setItem('code', data.code);

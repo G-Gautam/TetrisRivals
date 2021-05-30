@@ -8,11 +8,13 @@ function createGameState() {
                 ready: false,
                 board: null,
                 piece: null,
+                nextPiece: null,
             },
             {
                 ready: false,
                 board: null,
                 piece: null,
+                nextPiece: null,
             }
         ]
     }

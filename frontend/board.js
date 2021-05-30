@@ -167,6 +167,14 @@ class Board {
         return this.piece;
     }
 
+    setNextPiece = (next) => {
+        this.next = next
+    }
+
+    getNextPiece = () => {
+        return this.next;
+    }
+
     valid = (p) => {
         return p.shape.every((row, dy) => {
             return row.every((value, dx) => {

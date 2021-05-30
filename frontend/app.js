@@ -149,6 +149,7 @@ function animate(now = 0) {
     board.draw();
     bridgeUpdatePiece(board.getPiece());
     bridgeUpdateBoard(board.getGrid());
+    bridgeUpdateNextPiece(board.getNextPiece());
     requestId = requestAnimationFrame(animate);
 }
 
@@ -165,6 +166,14 @@ function updateOpponent(state) {
         let piece = new Piece(ctxList[1]);
         piece.completePiece(state.piece.color, state.piece.hardDropped, state.piece.shape, state.piece.typeId, state.piece.x, state.piece.y);
         board2.setPiece(piece);
+    }
+    if (state.nextPiece) {
+        let next = new Piece(ctxNextList[1]);
+        next.completePiece(state.nextPiece.color, state.nextPiece.hardDropped, state.nextPiece.shape, state.nextPiece.typeId, state.nextPiece.x, state.nextPiece.y);
+        board2.setNextPiece(next);
+        const { width, height } = this.ctxNextList[1].canvas;
+        this.ctxNextList[1].clearRect(0, 0, width, height);
+        board2.getNextPiece().draw();
     }
     ctxList[1].clearRect(0, 0, ctxList[1].canvas.width, ctxList[1].canvas.height);
     board2.init();
