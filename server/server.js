@@ -19,7 +19,8 @@ io.on('connection', client => {
     client.on("createGame", createGame);
     client.on("joinGame", joinGame);
     client.on("ready", ready);
-    client.on("updatePosition", updatePosition);
+    client.on("updateBoard", updateBoard);
+    client.on("updatePiece", updatePiece);
 
     function createGame() {
         MongoClient.connect(url, (err, dbclient) => {
@@ -117,22 +118,24 @@ io.on('connection', client => {
         });
     }
 
-    function updatePosition(board, playerNum) {
-        MongoClient.connect(url, (err, dbclient) => {
-            const db = dbclient.db(dbName);
-            const codeCollection = db.collection(collectionName);
-            codeCollection.findOne({ cid: id }, (err, res) => {
-                if (err) throw err;
-                const code = res.code;
-                if (playerNum == 1) {
-                    state[code].players[0].board = board;
-                    io.to(code.toString()).emit('gameState', state[code]);
-                } else {
-                    state[code].players[1].board = board;
-                    io.to(code.toString()).emit('gameState', state[code]);
-                }
-            });
-        });
+    function updateBoard(board, playerNum, code) {
+        if (playerNum == 1) {
+            state[code].players[0].board = board;
+            io.to(code.toString()).emit('gameState', state[code]);
+        } else {
+            state[code].players[1].board = board;
+            io.to(code.toString()).emit('gameState', state[code]);
+        }
+    }
+
+    function updatePiece(piece, playerNum, code) {
+        if (playerNum == 1) {
+            state[code].players[0].piece = piece;
+            io.to(code.toString()).emit('gameState', state[code]);
+        } else {
+            state[code].players[1].piece = piece;
+            io.to(code.toString()).emit('gameState', state[code]);
+        }
     }
 });
 

@@ -52,6 +52,7 @@ let requestId;
 function ready() {
     addEventListener();
     board.reset();
+    board2.reset();
     bridgeReady();
     var button = document.getElementById('ready1');
     button.style = "background-color: rgba(172, 255, 47, 0.308)";
@@ -129,7 +130,6 @@ function handleKeyPress(event) {
         } else if (board.valid(p)) {
             board.piece.move(p);
         }
-        // bridgeUpdateServer(board.grid);
     }
 }
 
@@ -158,8 +158,16 @@ function updateOpponent(state) {
         readyButton.disabled = false;
         readyButton.style = "background-color: rgba(172, 255, 47, 0.308)";
     }
-    board2.grid = state.board;
-    board2.drawBoard();
+    board2.setGrid(state.board);
+
+    // if (state.piece) {
+    //     let piece = new Piece(ctxList[1]);
+    //     piece.completePiece(state.piece.color, state.piece.hardDropped, state.piece.shape, state.piece.typeId, state.piece.x, state.piece.y);
+    //     board2.setPiece(piece);
+    // }
+    ctxList[1].clearRect(0, 0, ctxList[1].canvas.width, ctxList[1].canvas.height);
+    board2.init();
+    board2.draw();
 }
 
 function startAnimation() {

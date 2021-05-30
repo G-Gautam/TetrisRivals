@@ -24,8 +24,12 @@ function bridgeReady() {
     socket.emit('ready', playerNum);
 }
 
-function bridgeUpdateServer(board) {
-    socket.emit('updatePosition', board, playerNum);
+function bridgeUpdateBoard(board) {
+    socket.emit('updateBoard', board, playerNum, sessionStorage.getItem('code'));
+}
+
+function bridgeUpdatePiece(piece) {
+    socket.emit('updatePiece', piece, playerNum, sessionStorage.getItem('code'));
 }
 
 function handleNewAndJoinGame(data) {

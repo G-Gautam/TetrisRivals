@@ -42,4 +42,13 @@ class Piece {
     randomizeTetrominoType(noOfTypes) {
         return Math.floor(Math.random() * noOfTypes + 1);
     }
+
+    completePiece = (color, hardDropped, shape, typeId, x, y) => {
+        this.color = color;
+        this.hardDropped = hardDropped;
+        this.shape = shape;
+        this.typeId = typeId;
+        this.x = x;
+        this.y = y;
+    }
 }

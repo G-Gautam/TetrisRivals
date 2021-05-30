@@ -2,6 +2,7 @@ class Board {
     constructor(ctx, ctxNext) {
         this.ctx = ctx;
         this.ctxNext = ctxNext;
+        this.grid = this.getEmptyBoard();
         this.init();
     }
 
@@ -27,7 +28,7 @@ class Board {
         this.ctx.canvas.height = ROWS * BLOCK_SIZE;
         this.addBackground();
         // Scale blocks
-        ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+        this.ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
     }
 
     reset = () => {
@@ -45,13 +46,16 @@ class Board {
     }
 
     freeze = () => {
+        let freeze = false
         this.piece.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value > 0) {
                     this.grid[y + this.piece.y][x + this.piece.x] = value;
+                    freeze = true
                 }
             });
         });
+        return freeze;
     }
 
     drop = () => {
@@ -59,8 +63,11 @@ class Board {
         if (this.valid(p)) {
             this.piece.move(p);
         } else {
-            this.freeze();
-            this.clearLines();
+            let freeze = this.freeze();
+            let lines = this.clearLines();
+            // if (freeze || lines) {
+            //     bridgeUpdateServer(this.grid);
+            // }
             if (this.piece.y === 0) {
                 // Game over
                 return false;
@@ -74,20 +81,25 @@ class Board {
     }
 
     draw = () => {
-        this.piece.draw();
+        if (this.piece) {
+            this.piece.draw();
+            // bridgeUpdatePiece(this.piece);
+        }
         this.drawBoard();
     }
 
     drawBoard = () => {
-        this.grid.forEach((row, y) => {
-            row.forEach((value, x) => {
-                if (value > 0) {
-                    this.ctx.fillStyle = COLORS[value];
-                    this.ctx.fillRect(x, y, 1, 1);
-                }
+        if (this.grid) {
+            this.grid.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value > 0) {
+                        this.ctx.fillStyle = COLORS[value];
+                        this.ctx.fillRect(x, y, 1, 1);
+                    }
+                });
             });
-        });
-        bridgeUpdateServer(board.grid);
+            bridgeUpdateBoard(this.grid);
+        }
     }
 
     clearLines = () => {
@@ -105,7 +117,8 @@ class Board {
                 this.grid.unshift(Array(COLS).fill(0));
             }
         });
-        bridgeUpdateServer(board.grid);
+        if (lines > 0) return true;
+        return false;
 
         // if (lines > 0) {
         //   // Calculate points from cleared lines and level.
@@ -139,6 +152,21 @@ class Board {
         return this.grid[y] && this.grid[y][x] === 0;
     }
 
+    setGrid = (grid) => {
+        this.grid = grid;
+    }
+
+    getGrid = () => {
+        return this.grid;
+    }
+
+    setPiece = (piece) => {
+        this.piece = piece;
+    }
+
+    getPiece = () => {
+        return this.piece;
+    }
 
     valid = (p) => {
         return p.shape.every((row, dy) => {
