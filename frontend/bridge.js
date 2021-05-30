@@ -1,7 +1,7 @@
 let socket;
 let playerNum;
 //dev
-socket = io();
+socket = io('http://localhost:3000');
 //prod
 // socket = io('139.177.194.61:3000');
 socket.on("gameCreated", handleNewAndJoinGame);
